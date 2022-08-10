@@ -16,21 +16,17 @@ export const BasicTable = () => {
   const data = useMemo(() => MOCK_DATA, []);
 
   // definine the table instance and assigning data
-  const tableInstance = useTable({
-    columns: columns,
-    data: data
-  })
-
-
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
+    footerGroups,
     rows,
     prepareRow
-  } = tableInstance;
-
-  // console.log('...getTableProps()', { ...getTableProps() });
+  } = useTable({
+    columns: columns,
+    data: data
+  })
 
 
 
@@ -66,13 +62,29 @@ export const BasicTable = () => {
                     </td>
                   })
                 }
-
               </tr>
             )
           })
         }
 
       </tbody>
+
+      <tfoot>
+        {
+          footerGroups.map(footerGroup => (
+            <tr { ...footerGroup.getFooterGroupProps() }>
+              {
+                footerGroup.headers.map(column => (
+                  <td { ...column.getFooterProps }>
+                    { column.render('Footer') }
+                  </td>
+                ))
+              }
+            </tr>
+          ))
+        }
+      </tfoot>
+
     </table>
   )
 }
